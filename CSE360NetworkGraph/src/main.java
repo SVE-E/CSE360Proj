@@ -11,7 +11,6 @@ public class main  {
 		user.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		user.setSize(400,300);	
 		user.setVisible(true);
-		
 	}
 
 }
