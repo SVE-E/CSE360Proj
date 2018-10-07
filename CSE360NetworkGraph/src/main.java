@@ -8,35 +8,33 @@ public class main {
 	public static void main(String[] args) {
 		NodeOperator nodeTree = new NodeOperator();
 		ArrayList<Node> pred = new ArrayList();
-		ArrayList<Node> allNodes = new ArrayList();
 		
 		
-		Node A = new Node("A",5);
-		Node B = new Node("B",7);
+		
+		Node A = new Node("A",5, pred);
+		Node B = new Node("B",7, pred);
 		nodeTree.addNode(A,pred, true);
 		nodeTree.addNode(B, pred, true);
 		pred.add(A);
 		pred.add(B);
-		Node C = new Node("C",1);
+		Node C = new Node("C",1, pred);
 		nodeTree.addNode(C, pred, false);
 		pred.clear();
-		Node D = new Node("D",3);
+		Node D = new Node("D",3, pred);
 		pred.add(C);
 		nodeTree.addNode(D, pred, false);
-		Node E = new Node("E",4);
+		Node E = new Node("E",4, pred);
 		nodeTree.addNode(E, pred, false);
 		pred.clear();
 		pred.add(D);
 		pred.add(E);
-		Node F = new Node("F", 7);
+		Node F = new Node("F", 7, pred);
 		nodeTree.addNode(F, pred, false);
 		
-		allNodes.add(A);
-		allNodes.add(B);
-		allNodes.add(C);
-		allNodes.add(D);
-		allNodes.add(E);
-		allNodes.add(F);
+		ArrayList<Node> allNodes = nodeTree.getAllNodes();
+		for(int i = 0; i< allNodes.size(); i++) {
+			System.out.println(allNodes.get(i).toString());
+		}
 		
 		for(int i = 0; i<allNodes.size();i++) {
 			System.out.println(allNodes.get(i).getName()+": ");
@@ -49,8 +47,9 @@ public class main {
 		
 		ArrayList<Path> allPaths = nodeTree.getAllPaths();
 		for(int i = 0; i< allPaths.size();i++) {
-			System.out.println("Path: " + allPaths.get(i).getPath() + " Length: " + allPaths.get(i).getLength());
+			System.out.println(allPaths.get(i).toString());
 		}
+		
 
 	}
 

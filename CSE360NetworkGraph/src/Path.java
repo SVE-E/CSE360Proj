@@ -29,4 +29,8 @@ public class Path {
 	public int getLength() {
 		return length;
 	}
+	
+	public String toString() {
+		return "Path: " + path + " Length: " + length;
+	}
 }

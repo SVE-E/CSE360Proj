@@ -4,9 +4,10 @@ import java.util.ArrayList;
 
 public class NodeOperator {
 	ArrayList<Node> heads = new ArrayList();
-	
+	ArrayList<Node> allNodes = new ArrayList();
 	
 	public void addNode(Node newNode, ArrayList<Node> preds, boolean starting) {
+		allNodes.add(newNode);
 		if (starting) {
 			heads.add(newNode);
 		}
@@ -65,6 +66,10 @@ public class NodeOperator {
 		}
 		
 		
+	}
+	
+	public ArrayList<Node> getAllNodes(){
+		return allNodes;
 	}
 	
 	
