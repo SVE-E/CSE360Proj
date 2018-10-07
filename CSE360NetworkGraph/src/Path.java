@@ -1,4 +1,3 @@
-package Project;
 
 public class Path {
 	private String path;
