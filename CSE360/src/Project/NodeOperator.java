@@ -8,7 +8,6 @@ public class NodeOperator {
 	
 	public void addNode(Node newNode, ArrayList<Node> preds, boolean starting) {
 		if (starting) {
-			
 			heads.add(newNode);
 		}
 		else {
@@ -37,6 +36,18 @@ public class NodeOperator {
 		for(int i = 0; i<heads.size();i++) {
 			traverseAndAdd(heads.get(i), paths, new Path());
 		}
+		
+		Path key;
+		int j;
+		for(int i = 2; i<paths.size();i++) {
+			key = paths.get(i);
+			j=i-1;
+			while(j >=0 && paths.get(j).getLength() < key.getLength()) {
+				paths.set(j+1, paths.get(j));
+				j--;
+			}
+			paths.set(j+1, key);
+		}
 		return paths;
 	}
 	
@@ -52,6 +63,8 @@ public class NodeOperator {
 				traverseAndAdd(current.nexts.get(i),pathList,newPath);
 			}
 		}
+		
+		
 	}
 	
 	

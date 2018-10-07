@@ -1,8 +1,8 @@
 package Project;
 
 public class Path {
-	String path;
-	int length;
+	private String path;
+	private int length;
 	
 	public Path() {
 		path="";
