@@ -2,6 +2,8 @@
 
 import java.util.ArrayList;
 
+import javax.swing.DefaultListModel;
+
 public class NodeOperator {
 	ArrayList<Node> heads = new ArrayList();
 	ArrayList<Node> allNodes = new ArrayList();
@@ -15,6 +17,7 @@ public class NodeOperator {
 			for(int i = 0; i < heads.size(); i++)
 				setUpNexts(heads.get(i), newNode, preds);
 		}
+		System.out.print("Added");
 	}
 	
 	public void setUpNexts(Node current, Node newNode, ArrayList<Node> preds) {
@@ -72,5 +75,17 @@ public class NodeOperator {
 		return allNodes;
 	}
 	
+	public DefaultListModel getNodeModel() {
+		DefaultListModel model = new DefaultListModel();
+		for (int i = 0; i< allNodes.size();i++) {
+			model.addElement(allNodes.get(i).toString());
+		}
+		return model;
+	}
+	
+	public void clearAll() {
+		heads.clear();
+		allNodes.clear();
+	}
 	
 } 
