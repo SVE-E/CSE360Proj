@@ -45,8 +45,8 @@ public class UserInterface extends JFrame {
 		
 	
 //LABELS	
-	labelActivities = new JLabel("Activities");
-	labelDuration = new JLabel("Duration");
+	labelActivities = new JLabel("Enter Activity Name: ");
+	labelDuration = new JLabel("Enter Duration: ");
 	labelDurationError = new JLabel("");
 	labelDurationError.setForeground(Color.red);
 
@@ -171,8 +171,14 @@ public class UserInterface extends JFrame {
 		
 		ArrayList<Node> allNodes = op.getAllNodes();
 		ArrayList<Node> preds = new ArrayList();
-		System.out.println(checkBln);
+		
+		
 		if(!checkBln) {
+			if(selected.length ==0) {
+				labelDurationError.setText("Select preceding activities");
+				return;
+			}
+				
 		for(int i = 0; i<allNodes.size(); i++) {
 			for(int j = 0; j<selected.length;j++) {
 				if(selected[j].equals(allNodes.get(i).getName())) {
@@ -182,6 +188,7 @@ public class UserInterface extends JFrame {
 				}
 		
 		}
+		
 		Node newNode = new Node(activitiesString,durationInt,preds);
 		op.addNode(newNode, preds, checkBln);
 		model.addElement(activitiesString);
@@ -257,8 +264,7 @@ public class UserInterface extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 		
-			JOptionPane.showMessageDialog(null, "CSE 360 Release 1 made by Oscar Amaya, Seve Esposito, and Urgi. This program allows users to enter\n activities with their duration and "
-					+ "preceding activities. And will give all their paths and lengths.");
+			JOptionPane.showMessageDialog(null, "CSE 360 Release 1 made by Oscar Amaya, Seve Esposito, and Urgi.\n This program allows users to create a network diagram and see all paths.\n Users are able to enter each activity with its duration and required preceding activities.\n The program will return all paths and their lengths.");
 		}
 		
 	}
