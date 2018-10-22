@@ -234,7 +234,6 @@ public class UserInterface extends JFrame {
 	{
 	public void actionPerformed(ActionEvent event)
 	{
-		ArrayList<Path> paths = op.getAllPaths();
 		if(op.checkForLoop() == false) {
 			if(op.checkForDisconnect() == false) {
 				ArrayList<Path> paths = op.getAllPaths();
