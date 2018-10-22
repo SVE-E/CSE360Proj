@@ -235,8 +235,19 @@ public class UserInterface extends JFrame {
 	public void actionPerformed(ActionEvent event)
 	{
 		ArrayList<Path> paths = op.getAllPaths();
-		for(int i = 0; i< paths.size();i++) {
-			currentActivityTextArea.append(paths.get(i).toString()+"\n");
+		if(op.checkForLoop() == false) {
+			if(op.checkForDisconnect() == false) {
+				ArrayList<Path> paths = op.getAllPaths();
+				for(int i = 0; i< paths.size();i++) {
+					currentActivityTextArea.append(paths.get(i).toString()+"\n");
+				}
+			}
+			else {
+				labelDurationError.setText("Disconnected activities in diagram");
+			}
+		}
+		else {
+			labelDurationError.setText("Data entered creates loop in network diagram");
 		}
 	
 	}

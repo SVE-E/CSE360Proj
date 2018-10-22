@@ -6,15 +6,25 @@ public class Node {
 	int duration;
 	ArrayList<Node> nexts = new ArrayList();
 	ArrayList<Node> predecessors = new ArrayList();
+	boolean visited;
 	public Node() {
 		name ="";
 		duration = 0;
+		visited = false;
 	}
 	
 	public Node(String n, int dur, ArrayList<Node> p) {
 		name = n;
 		duration = dur;
 		predecessors = p;
+	}
+	
+	public void setVisited(boolean v) {
+		visited = v;
+	}
+	
+	public boolean getVisited() {
+		return visited;
 	}
 	
 	public String getName() {
