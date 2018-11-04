@@ -13,18 +13,22 @@ import java.io.IOException;
 public class UserInterface extends JFrame {
 
 	
-	private JLabel labelActivities, labelDuration, labelDurationError, labelDoneError;
-	private JTextField activitiesTxt, durationTxt;
-	private JButton plusBtn, doneBtn, helpBtn, aboutBtn, restartBtn;
+	private JLabel labelActivities, labelDuration, labelDurationError, labelDoneError, labelPredecesor;
+	private JTextField activitiesTxt, durationTxt, predecesorTxt;
+	private JButton plusBtn, doneBtn, helpBtn, aboutBtn, restartBtn, criticalPathBtn;
 	private JCheckBox startingCheckBox;
 	private JTextArea currentActivityTextArea;
 	private JScrollPane scroll;
 	private JList list;
 	private int[] myIntArray = new int[3];
 	
+	//string to tokenize
+	
+	
 	
 	private String activitiesString;
 	private String durationString;
+	private String predecesorString;
 	private int durationInt;
 	private Boolean checkBln;
 	private Object selected[];
@@ -45,8 +49,14 @@ public class UserInterface extends JFrame {
 		
 	
 //LABELS	
+<<<<<<< HEAD
 	labelActivities = new JLabel("Activities");
 	labelDuration = new JLabel("Duration");
+	labelPredecesor = new JLabel("Predecesor");
+=======
+	labelActivities = new JLabel("Enter Activity Name: ");
+	labelDuration = new JLabel("Enter Duration: ");
+>>>>>>> 2bfc55c15a875974486c51394fe1a3cea3ef8275
 	labelDurationError = new JLabel("");
 	labelDurationError.setForeground(Color.red);
 
@@ -56,11 +66,14 @@ public class UserInterface extends JFrame {
 	helpBtn = new JButton("Help");
 	restartBtn = new JButton("Restart");
 	aboutBtn = new JButton("About");
+	criticalPathBtn = new JButton("Critical Path");
+	
 
 	//TEXTFIELDS
-	
 	activitiesTxt = new JTextField(15);
 	durationTxt = new JTextField(15);
+	predecesorTxt = new JTextField(15);
+	
 	
 	currentActivityTextArea = new JTextArea(15,15);
 	currentActivityTextArea.setWrapStyleWord(true);
@@ -76,9 +89,6 @@ public class UserInterface extends JFrame {
 	setVisible(true);
 	
 	
-	
-	
-	
 
 	
 	JPanel panelA = new JPanel();
@@ -86,14 +96,19 @@ public class UserInterface extends JFrame {
 	JPanel panelC = new JPanel();
 	JPanel panelD = new JPanel();
 	JPanel borderA = new JPanel();
-	
-	panelA.setLayout(new GridLayout(3,2));
+	//row 1
+	panelA.setLayout(new GridLayout(4,2));
 	panelA.add(labelActivities);
 	panelA.add(activitiesTxt);
 	
-	
+	//row 2
 	panelA.add(labelDuration);
 	panelA.add(durationTxt);
+	
+	//row 3
+	panelA.add(labelPredecesor);
+	panelA.add(predecesorTxt);
+	//row4
 	panelA.add(startingCheckBox);
 	panelA.add(labelDurationError);
 	
@@ -107,6 +122,7 @@ public class UserInterface extends JFrame {
 	panelC.add(helpBtn);
 	panelC.add(aboutBtn);
 	panelC.add(restartBtn);
+	panelC.add(criticalPathBtn);
 	
 	panelD.setLayout(new GridLayout(1,1));
 	panelD.add(currentActivityTextArea);
@@ -143,9 +159,19 @@ public class UserInterface extends JFrame {
 	{
 	public void actionPerformed(ActionEvent event)
 	{
+		String[] values;
 		if(event.getSource() == plusBtn) {
 		activitiesString = activitiesTxt.getText();
 		durationString = durationTxt.getText();
+		predecesorString = predecesorTxt.getText();
+		
+		//the values of predecesors separated by comma
+		values = predecesorString.split(",");
+		for(int i = 0; i<values.length; i++)
+		{
+			System.out.println(values[i]);
+		}
+		
 		if(activitiesString.isEmpty() || durationString.isEmpty()) {
 			labelDurationError.setText("Make sure all fields completed");
 			return;
@@ -171,8 +197,14 @@ public class UserInterface extends JFrame {
 		
 		ArrayList<Node> allNodes = op.getAllNodes();
 		ArrayList<Node> preds = new ArrayList();
-		System.out.println(checkBln);
+		
+		
 		if(!checkBln) {
+			if(selected.length ==0) {
+				labelDurationError.setText("Select preceding activities");
+				return;
+			}
+				
 		for(int i = 0; i<allNodes.size(); i++) {
 			for(int j = 0; j<selected.length;j++) {
 				if(selected[j].equals(allNodes.get(i).getName())) {
@@ -182,6 +214,7 @@ public class UserInterface extends JFrame {
 				}
 		
 		}
+		
 		Node newNode = new Node(activitiesString,durationInt,preds);
 		op.addNode(newNode, preds, checkBln);
 		model.addElement(activitiesString);
@@ -257,8 +290,7 @@ public class UserInterface extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 		
-			JOptionPane.showMessageDialog(null, "CSE 360 Release 1 made by Oscar Amaya, Seve Esposito, and Urgi. This program allows users to enter\n activities with their duration and "
-					+ "preceding activities. And will give all their paths and lengths.");
+			JOptionPane.showMessageDialog(null, "CSE 360 Release 1 made by Oscar Amaya, Seve Esposito, and Urgi.\n This program allows users to create a network diagram and see all paths.\n Users are able to enter each activity with its duration and required preceding activities.\n The program will return all paths and their lengths.");
 		}
 		
 	}
