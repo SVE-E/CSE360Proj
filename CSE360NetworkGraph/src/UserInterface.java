@@ -320,8 +320,33 @@ public class UserInterface extends JFrame {
 						{
 						FileWriter reportWriter = new FileWriter(newReport);
 						BufferedWriter reportbuf = new BufferedWriter(reportWriter);
+						reportbuf.write(reportName);
+						reportbuf.newLine();
 						reportbuf.write(theDate.toString() + "\n");
+						
+						ArrayList<Node> allNodes = op.getAllNodes();
+						
+						Node key;
+						int j;
+						for(int i = 1; i<allNodes.size();i++) {
+							key = allNodes.get(i);
+							j=i-1;
+							while(j >=0 && allNodes.get(j).getDuration() < key.getDuration()) {
+								allNodes.set(j+1, allNodes.get(j));
+								j--;
+							}
+							allNodes.set(j+1, key);
+						}
+						
+						
+						for(int i = 0; i < allNodes.size(); i++) {
+							reportbuf.newLine();
+							reportbuf.write(allNodes.get(i).toString());
+						}
+						
+						
 						for(int i = 0; i< paths.size();i++) {
+							reportbuf.newLine();
 							reportbuf.write(paths.get(i).toString()+"\n");
 						}
 						reportbuf.close();
