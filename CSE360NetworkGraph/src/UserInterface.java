@@ -50,7 +50,7 @@ public class UserInterface extends JFrame {
 		startingCheckBox = new JCheckBox("Starting");
 		startingCheckBox.addActionListener(new checkListener());
 		startingCheckBox.setSelected(true);
-		startingCheckBox.setEnabled(false);
+		startingCheckBox.setEnabled(true);
 		checkBln=true;
 		
 		criticalCheckBox = new JCheckBox("Critical Path");
@@ -391,10 +391,13 @@ public class UserInterface extends JFrame {
 			durationTxt.setText("");
 			activitiesTxt.setText("");
 			selected = new Object[0];
-			startingCheckBox.setEnabled(false);
+			startingCheckBox.setEnabled(true);
 			startingCheckBox.setSelected(true);
 			checkBln=true;
 			labelDurationError.setText("");
+			predecesorTxt.setText("");
+			predecesorTxt.setEnabled(false);
+			
 		}
 		
 	}
@@ -413,10 +416,13 @@ public class UserInterface extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 		
-			JOptionPane.showMessageDialog(null, "How to use network diagram traverser:\n 1. Enter Activity name and duration (integer) \n 2. If activity has no proceding activities check Starting \n"
-					+ "3. Select proceding activities using list on right\n (hold CTRL to select multiple)\n"
-					+ "4. Click Done when finished to recieve output\n"
-					+ "5. Click Restart to clear data and start again ");
+			JOptionPane.showMessageDialog(null, "How to use network diagram traverser:\n 1. Enter Activity name and duration (integer) \n 2. If activity has no preceding activities check Starting \n"
+					+ "3. Write preceding activities using list on right\n (hold CTRL to select multiple)\n"
+					+ "4. Edit current activitie's duration by writing the name of the activity and the new duration and preceding activities\n"
+					+ "5. By selecting the critical path checkbox it will only display the longest path\n"
+					+ "6. Click Done when finished to recieve output\n"
+					+ "7. Click create report to make text file with the output of the program\n"
+					+ "8. Click Restart to clear data and start again ");
 		}
 		
 	}
