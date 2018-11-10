@@ -1,4 +1,5 @@
 import java.awt.BorderLayout;
+
 import java.awt.GridLayout;
 
 import javax.swing.*;
@@ -9,13 +10,17 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 import java.io.IOException;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.util.Date;
 
 public class UserInterface extends JFrame {
 
 	
 	private JLabel labelActivities, labelDuration, labelDurationError, labelDoneError, labelPredecesor;
 	private JTextField activitiesTxt, durationTxt, predecesorTxt;
-	private JButton plusBtn, doneBtn, helpBtn, aboutBtn, restartBtn;
+	private JButton plusBtn, doneBtn, helpBtn, aboutBtn, restartBtn,reportBtn;
 	private JCheckBox startingCheckBox, criticalCheckBox;
 	private JTextArea currentActivityTextArea;
 	private JScrollPane scroll;
@@ -71,6 +76,7 @@ public class UserInterface extends JFrame {
 	helpBtn = new JButton("Help");
 	restartBtn = new JButton("Restart");
 	aboutBtn = new JButton("About");
+	reportBtn = new JButton("Create Report");
 	
 	
 
@@ -128,6 +134,7 @@ public class UserInterface extends JFrame {
 	panelC.add(helpBtn);
 	panelC.add(aboutBtn);
 	panelC.add(restartBtn);
+	panelC.add(reportBtn);
 	panelC.add(criticalCheckBox);
 	
 	panelD.setLayout(new GridLayout(1,1));
@@ -150,6 +157,8 @@ public class UserInterface extends JFrame {
 	
 	AboutListener aboutlist = new AboutListener();
 	aboutBtn.addActionListener(aboutlist);
+	
+	reportBtn.addActionListener(donelist);
 	
 	helpBtn.addActionListener(new HelpListener());
 	
@@ -259,6 +268,7 @@ public class UserInterface extends JFrame {
 		
 	}
 	
+	
 	public class DoneListener implements ActionListener
 	{
 	public void actionPerformed(ActionEvent event)
@@ -270,6 +280,39 @@ public class UserInterface extends JFrame {
 				
 			
 				ArrayList<Path> paths = op.getAllPaths();
+				
+				if(event.getSource() == reportBtn)
+				{
+					Date theDate = new Date();
+					String reportName = JOptionPane.showInputDialog("Enter the name of the title");
+					File newReport = new File(reportName +".txt");
+					
+						try{
+							newReport.createNewFile();
+						}
+						catch (Exception e)
+						{
+							e.printStackTrace();
+							System.out.println("Something went wront");
+						}
+						try
+						{
+						FileWriter reportWriter = new FileWriter(newReport);
+						BufferedWriter reportbuf = new BufferedWriter(reportWriter);
+						reportbuf.write(theDate.toString() + "\n");
+						for(int i = 0; i< paths.size();i++) {
+							reportbuf.write(paths.get(i).toString()+"\n");
+						}
+						reportbuf.close();
+						}
+						catch(Exception e)
+						{
+							e.printStackTrace();
+							System.out.println("Something went wront");
+						}
+					
+				}
+				
 				if(criticalBln) {
 					int i = 0;
 					do {
