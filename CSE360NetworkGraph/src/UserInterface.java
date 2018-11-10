@@ -23,9 +23,10 @@ public class UserInterface extends JFrame {
 	private JButton plusBtn, doneBtn, helpBtn, aboutBtn, restartBtn,reportBtn;
 	private JCheckBox startingCheckBox, criticalCheckBox;
 	private JTextArea currentActivityTextArea;
-	private JScrollPane scroll;
+	
 	private JList list;
 	private int[] myIntArray = new int[3];
+	
 	
 	//string to tokenize
 	
@@ -79,6 +80,7 @@ public class UserInterface extends JFrame {
 	reportBtn = new JButton("Create Report");
 	
 	
+	
 
 	//TEXTFIELDS
 	activitiesTxt = new JTextField(15);
@@ -92,11 +94,18 @@ public class UserInterface extends JFrame {
 	currentActivityTextArea.setLineWrap(true);
 	currentActivityTextArea.setEditable(false);
 	
+	JScrollPane scroll = new JScrollPane(currentActivityTextArea, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, 
+  		  JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+	
+	JScrollPane listScroller = new JScrollPane();
 	model = op.getNodeModel();
 	list = new JList(model);
 	list.setVisibleRowCount(0);
 	
 	list.addListSelectionListener(new ListListener());
+	listScroller.setViewportView(list);
+	list.setLayoutOrientation(JList.VERTICAL);
+	//panelS.add(listScroller);
 	setSize(300,300);
 	setVisible(true);
 	
@@ -128,7 +137,7 @@ public class UserInterface extends JFrame {
 	
 	panelB.setLayout(new GridLayout(1,2));
 	panelB.add(plusBtn);
-	panelB.add(list);
+	panelB.add(listScroller);
 	
 	panelC.add(doneBtn);
 	panelC.add(helpBtn);
@@ -138,7 +147,7 @@ public class UserInterface extends JFrame {
 	panelC.add(criticalCheckBox);
 	
 	panelD.setLayout(new GridLayout(1,1));
-	panelD.add(currentActivityTextArea);
+	panelD.add(scroll);
 	
 	borderA.setLayout(new GridLayout(4,1));
 	borderA.add(panelA);
@@ -192,6 +201,18 @@ public class UserInterface extends JFrame {
 			return;
 		
 		}
+		
+		if(activitiesString.contains(" ") || activitiesString.contains(",")) {
+			labelDurationError.setText("Activity name cannont contain a space or comma");
+			return;
+		}
+		
+		if(predecesorString.contains(" ")) {
+			labelDurationError.setText("Remove spaces from predecessor names");
+			return;
+		}
+		
+		
 		try
 		{
 		durationInt = Integer.parseInt(durationTxt.getText());
