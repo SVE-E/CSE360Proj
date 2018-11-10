@@ -183,6 +183,18 @@ public class UserInterface extends JFrame {
 			return;
 		
 		}
+		
+		if(activitiesString.contains(" ") || activitiesString.contains(",")) {
+			labelDurationError.setText("Activity name cannont contain a space or comma");
+			return;
+		}
+		
+		if(predecesorString.contains(" ")) {
+			labelDurationError.setText("Remove spaces from predecessor names");
+			return;
+		}
+		
+		
 		try
 		{
 		durationInt = Integer.parseInt(durationTxt.getText());
