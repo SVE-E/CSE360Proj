@@ -10,31 +10,49 @@ public class NodeOperator {
 	
 	int currentCount = 0;
 	
-	public void addNode(Node newNode, ArrayList<Node> preds, boolean starting) {
+	public void addNode(String name, int dur, String[] preds, boolean starting) {
+		for(int i = 0; i < allNodes.size(); i++) {
+			if(name.equals(allNodes.get(i).getName())) {
+				allNodes.get(i).setDuration(dur);
+				allNodes.get(i).setPreds(preds);
+				return;
+			}
+		}
+		Node newNode = new Node(name, dur, preds);
 		allNodes.add(newNode);
 		if (starting) {
 			heads.add(newNode);
 		}
-		else {
-			for(int i = 0; i < heads.size(); i++)
-				setUpNexts(heads.get(i), newNode, preds);
-		}
 		System.out.print("Added");
 	}
 	
-	public void setUpNexts(Node current, Node newNode, ArrayList<Node> preds) {
-		if(preds.contains(current)) {
-			if(!current.nexts.contains(newNode))
-				current.addNext(newNode);
+	public void setUpNexts() {
+		
+		for(int i = 0; i < allNodes.size(); i++) {
+			allNodes.get(i).nexts.clear();
+			allNodes.get(i).predecessors.clear();
 		}
 		
-		if(current.nexts.isEmpty()) { //stopping condition
-			return;
-		}
-		else {
-			for(int i = 0; i<current.nexts.size(); i++)
-				setUpNexts(current.nexts.get(i), newNode, preds);
+		for(int i = 0; i < allNodes.size(); i ++) {
+			for(int j = 0 ; j < allNodes.get(i).predNames.size(); j++) {
+				String temp = allNodes.get(i).predNames.get(j);
+				for(int k = 0; k < allNodes.size(); k++) {
+					if(temp.equals(allNodes.get(k).getName())) {
+						allNodes.get(k).nexts.add(allNodes.get(i));
+						allNodes.get(i).predecessors.add(allNodes.get(k));
+					}
+				}
 			}
+		}
+		
+		for(int i = 0; i < allNodes.size(); i++) {
+			System.out.println(allNodes.get(i).getName() + " : ");
+			for(int j = 0; j < allNodes.get(i).nexts.size(); j++) {
+				System.out.print(allNodes.get(i).nexts.get(j).getName() + " ");
+			}
+		}
+		
+		
 	}
 	
 	public ArrayList<Path> getAllPaths(){
@@ -46,7 +64,7 @@ public class NodeOperator {
 		
 		Path key;
 		int j;
-		for(int i = 2; i<paths.size();i++) {
+		for(int i = 1; i<paths.size();i++) {
 			key = paths.get(i);
 			j=i-1;
 			while(j >=0 && paths.get(j).getLength() < key.getLength()) {

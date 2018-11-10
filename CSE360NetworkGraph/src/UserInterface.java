@@ -13,20 +13,24 @@ import java.io.IOException;
 public class UserInterface extends JFrame {
 
 	
-	private JLabel labelActivities, labelDuration, labelDurationError, labelDoneError;
-	private JTextField activitiesTxt, durationTxt;
+	private JLabel labelActivities, labelDuration, labelDurationError, labelDoneError, labelPredecesor;
+	private JTextField activitiesTxt, durationTxt, predecesorTxt;
 	private JButton plusBtn, doneBtn, helpBtn, aboutBtn, restartBtn;
-	private JCheckBox startingCheckBox;
+	private JCheckBox startingCheckBox, criticalCheckBox;
 	private JTextArea currentActivityTextArea;
 	private JScrollPane scroll;
 	private JList list;
 	private int[] myIntArray = new int[3];
 	
+	//string to tokenize
+	
+	
 	
 	private String activitiesString;
 	private String durationString;
+	private String predecesorString;
 	private int durationInt;
-	private Boolean checkBln;
+	private Boolean checkBln, criticalBln;
 	private Object selected[];
 	NodeOperator op = new NodeOperator();
 	DefaultListModel model;
@@ -43,24 +47,39 @@ public class UserInterface extends JFrame {
 		startingCheckBox.setEnabled(false);
 		checkBln=true;
 		
+		criticalCheckBox = new JCheckBox("Critical Path");
+		criticalCheckBox.addActionListener(new checkListener());
+		criticalCheckBox.setSelected(false);
+		criticalCheckBox.setEnabled(true);
+		criticalBln = false;
 	
 //LABELS	
+
+	labelActivities = new JLabel("Activities");
+	labelDuration = new JLabel("Duration");
+	labelPredecesor = new JLabel("Predecesor");
+
 	labelActivities = new JLabel("Enter Activity Name: ");
 	labelDuration = new JLabel("Enter Duration: ");
+
 	labelDurationError = new JLabel("");
 	labelDurationError.setForeground(Color.red);
 
 	//BUTTONS
-	plusBtn = new JButton("Add");
+	plusBtn = new JButton("Add/Edit");
 	doneBtn = new JButton("Done");
 	helpBtn = new JButton("Help");
 	restartBtn = new JButton("Restart");
 	aboutBtn = new JButton("About");
+	
+	
 
 	//TEXTFIELDS
-	
 	activitiesTxt = new JTextField(15);
 	durationTxt = new JTextField(15);
+	predecesorTxt = new JTextField(15);
+	predecesorTxt.setEnabled(false);
+	
 	
 	currentActivityTextArea = new JTextArea(15,15);
 	currentActivityTextArea.setWrapStyleWord(true);
@@ -70,13 +89,10 @@ public class UserInterface extends JFrame {
 	model = op.getNodeModel();
 	list = new JList(model);
 	list.setVisibleRowCount(0);
-	list.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+	
 	list.addListSelectionListener(new ListListener());
 	setSize(300,300);
 	setVisible(true);
-	
-	
-	
 	
 	
 
@@ -86,14 +102,19 @@ public class UserInterface extends JFrame {
 	JPanel panelC = new JPanel();
 	JPanel panelD = new JPanel();
 	JPanel borderA = new JPanel();
-	
-	panelA.setLayout(new GridLayout(3,2));
+	//row 1
+	panelA.setLayout(new GridLayout(4,2));
 	panelA.add(labelActivities);
 	panelA.add(activitiesTxt);
 	
-	
+	//row 2
 	panelA.add(labelDuration);
 	panelA.add(durationTxt);
+	
+	//row 3
+	panelA.add(labelPredecesor);
+	panelA.add(predecesorTxt);
+	//row4
 	panelA.add(startingCheckBox);
 	panelA.add(labelDurationError);
 	
@@ -107,6 +128,7 @@ public class UserInterface extends JFrame {
 	panelC.add(helpBtn);
 	panelC.add(aboutBtn);
 	panelC.add(restartBtn);
+	panelC.add(criticalCheckBox);
 	
 	panelD.setLayout(new GridLayout(1,1));
 	panelD.add(currentActivityTextArea);
@@ -143,9 +165,19 @@ public class UserInterface extends JFrame {
 	{
 	public void actionPerformed(ActionEvent event)
 	{
+		String[] values;
 		if(event.getSource() == plusBtn) {
 		activitiesString = activitiesTxt.getText();
 		durationString = durationTxt.getText();
+		predecesorString = predecesorTxt.getText();
+		
+		//the values of predecesors separated by comma
+		values = predecesorString.split(",");
+		for(int i = 0; i<values.length; i++)
+		{
+			System.out.println(values[i]);
+		}
+		
 		if(activitiesString.isEmpty() || durationString.isEmpty()) {
 			labelDurationError.setText("Make sure all fields completed");
 			return;
@@ -161,42 +193,30 @@ public class UserInterface extends JFrame {
 	 	
 	 		 return;//error
 	 	 }
-		
-		}
 		labelDurationError.setText("");
 		//activitiesString;
 		//durationInt
 		//checkBln
 			
-		
-		ArrayList<Node> allNodes = op.getAllNodes();
-		ArrayList<Node> preds = new ArrayList();
-		
-		
-		if(!checkBln) {
-			if(selected.length ==0) {
-				labelDurationError.setText("Select preceding activities");
-				return;
-			}
-				
-		for(int i = 0; i<allNodes.size(); i++) {
-			for(int j = 0; j<selected.length;j++) {
-				if(selected[j].equals(allNodes.get(i).getName())) {
-					preds.add(allNodes.get(i));
-					}
-					}
-				}
-		
+		if(!checkBln && predecesorString.isEmpty()) {
+			labelDurationError.setText("Please enter preceding actvities");
+			return;
 		}
 		
-		Node newNode = new Node(activitiesString,durationInt,preds);
-		op.addNode(newNode, preds, checkBln);
-		model.addElement(activitiesString);
 		
-		list.setVisibleRowCount(allNodes.size()+1);
+		
+	
+		op.addNode(activitiesString, durationInt, values, checkBln);
+		model = op.getNodeModel();
+		list.setModel(model);
+		
+		//list.setVisibleRowCount(allNodes.size()+1);
 		list.clearSelection();
 		
 		startingCheckBox.setEnabled(true);
+		
+		}
+		
 	}
 	}
 	
@@ -218,13 +238,22 @@ public class UserInterface extends JFrame {
 		public void actionPerformed(ActionEvent arg0) {
 			if(startingCheckBox.isSelected() == true) {
 				  checkBln = true;
-				  list.clearSelection();
-				  list.disable();
+				  predecesorTxt.setEnabled(false);
+				  predecesorTxt.setText("");
 				  
-				} else if (startingCheckBox.isSelected() == false) {
+			} else if (startingCheckBox.isSelected() == false) {
 					checkBln = false;
-					list.enable();
-				}
+					predecesorTxt.setEnabled(true);
+					  predecesorTxt.setText("");
+			}
+			
+			if(criticalCheckBox.isSelected()) {
+				criticalBln = true;
+			}
+			else {
+				criticalBln = false;
+			}
+			
 			
 		}
 		
@@ -234,19 +263,30 @@ public class UserInterface extends JFrame {
 	{
 	public void actionPerformed(ActionEvent event)
 	{
+		currentActivityTextArea.setText("");
+		op.setUpNexts();
 		if(op.checkForLoop() == false) {
 			if(op.checkForDisconnect() == false) {
+				
+			
 				ArrayList<Path> paths = op.getAllPaths();
-				for(int i = 0; i< paths.size();i++) {
-					currentActivityTextArea.append(paths.get(i).toString()+"\n");
+				if(criticalBln) {
+					int i = 0;
+					do {
+						currentActivityTextArea.append(paths.get(i).toString()+"\n");
+						i++;
+					}while ((i < paths.size()) && (paths.get(i).getLength() == paths.get(i-1).getLength()));
 				}
+				else {
+					for(int i = 0; i< paths.size();i++) {
+						currentActivityTextArea.append(paths.get(i).toString()+"\n");
+					}
+				}
+			}else {
+				labelDurationError.setText("Disconnect in diagram");
 			}
-			else {
-				labelDurationError.setText("Disconnected activities in diagram");
-			}
-		}
-		else {
-			labelDurationError.setText("Data entered creates loop in network diagram");
+		}else {
+			labelDurationError.setText("Loop exists");
 		}
 	
 	}
@@ -295,5 +335,3 @@ public class UserInterface extends JFrame {
 	
 	
 }
-
-
