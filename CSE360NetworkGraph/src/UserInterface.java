@@ -406,7 +406,7 @@ public class UserInterface extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 		
-			JOptionPane.showMessageDialog(null, "CSE 360 Release 1 made by Oscar Amaya, Seve Esposito, and Urgi.\n This program allows users to create a network diagram and see all paths.\n Users are able to enter each activity with its duration and required preceding activities.\n The program will return all paths and their lengths.");
+			JOptionPane.showMessageDialog(null, "CSE 360 Release 2 made by Oscar Amaya, Seve Esposito, and Urgi.\n This program allows users to create a network diagram and see all paths.\n Users are able to enter each activity with its duration and required preceding activities.\n The program will return all paths and their lengths.");
 		}
 		
 	}
@@ -417,11 +417,11 @@ public class UserInterface extends JFrame {
 		public void actionPerformed(ActionEvent arg0) {
 		
 			JOptionPane.showMessageDialog(null, "How to use network diagram traverser:\n 1. Enter Activity name and duration (integer) \n 2. If activity has no preceding activities check Starting \n"
-					+ "3. Write preceding activities using list on right\n (hold CTRL to select multiple)\n"
-					+ "4. Edit current activitie's duration by writing the name of the activity and the new duration and preceding activities\n"
-					+ "5. By selecting the critical path checkbox it will only display the longest path\n"
+					+ "3. Write preceding activities into Predecessor field\n (Seperated by commas and with no spaces)\n"
+					+ "4. Edit an activitie's duration by reentering the activity with the new duration and preceding activies\n"
+					+ "5. By selecting the critical path checkbox it will only display the longest path(s) in the network diagram\n"
 					+ "6. Click Done when finished to recieve output\n"
-					+ "7. Click create report to make text file with the output of the program\n"
+					+ "7. Click create report to generate a text file with the output of the program\n"
 					+ "8. Click Restart to clear data and start again ");
 		}
 		
